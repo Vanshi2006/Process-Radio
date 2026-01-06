@@ -1,6 +1,5 @@
 # Process-Radio
-Process Radio is a C-based OS project that simulates radio broadcasting using fork, pipes, threads, mutexes, and signals. It demonstrates inter-process communication, multithreading, non-blocking input handling, and graceful process control on Linux systems.
-// listener.c 
+Process Radio is a C-based OS project that simulates radio broadcasting using fork, pipes, threads, mutexes, and signals. It demonstrates inter-process communication, multithreading, non-blocking input handling, and graceful process control on Linux systems.listener.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -11,19 +10,19 @@ Process Radio is a C-based OS project that simulates radio broadcasting using fo
 #define MAX_SONGS 100
 #define LINE_LEN  256
 
-char song_buffer[MAX_SONGS][LINE_LEN];
-int count=0;
-int running =1;
-pthread_mutex_t lock;
+    char song_buffer[MAX_SONGS][LINE_LEN];
+    int count=0;
+    int running =1;
+       pthread_mutex_t lock;
 
-void handle_sigterm(int sig){
+    void handle_sigterm(int sig){
 
     running=0;
     printf("\n Listener shutting down...\n");
-}
+   }
 
 
-void *receiver_thread(void *arg) {
+    void *receiver_thread(void *arg) {
     FILE *in = fdopen(STDIN_FILENO,"r");
     if(!in){
         perror("fdopen");
@@ -50,7 +49,7 @@ void *receiver_thread(void *arg) {
        return NULL;
 }
 
-void *logger_thread(void *arg){
+     void *logger_thread(void *arg){
     int id = *(int *)arg;
     char filename[64];
     sprintf(filename,"listener%d_log.txt",id);
@@ -85,7 +84,7 @@ void *logger_thread(void *arg){
     return NULL;
 }
 
-int main(int argc,char *argv[]){
+     int main(int argc,char *argv[]){
     if(argc<2){
         fprintf(stderr,"Usage:listener <id>\n");
         return 1;
@@ -129,15 +128,15 @@ int main(int argc,char *argv[]){
 #include <sys/types.h>  
 #include <errno.h>
 
-pid_t pid1 = 0, pid2 = 0;
-void show_menu(){
+     pid_t pid1 = 0, pid2 = 0;
+    void show_menu(){
     printf("\n --- Controls ---\n");
     printf("p : Pause listeners\n");
     printf("r : Resume listeners\n");
     printf("s : Stop broadcast\n");
-    printf("------------------\n");
-}
-int main(){
+     printf("------------------\n");
+    }
+      int main(){
     int fd1[2],fd2[2];
     if (pipe(fd1)==-1)
     {perror("pipe1"); return 1;}
@@ -191,9 +190,9 @@ int main(){
     w =write(fd2[1], song, strlen(song));
     if(w==-1 && errno!=EPIPE) perror("write fd2");
     write(fd2[1], "\n", 1);
-}else{
+    }else{
     printf("\n(Broadcast paused — not sending new songs)\n");
-}
+    }
 
         for (int t=0;t<4;++t){
             fd_set rfds;
@@ -232,9 +231,9 @@ int main(){
         }
     }
 
-wait_children:
+     wait_children:
     if (pid1) waitpid(pid1, NULL, 0);
     if (pid2) waitpid(pid2, NULL, 0);
     printf(" Broadcast ended.\n");
     return 0;
-}
+    }
